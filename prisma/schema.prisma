@@ -1,0 +1,52 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model membership_plans {
+  p_id          Int             @id @default(autoincrement())
+  name          String          @db.VarChar(255)
+  description   String?
+  rate          Decimal         @db.Decimal(10, 2)
+  subscribed_by subscriptions[]
+}
+
+model subscriptions {
+  sub_id           Int                @id @default(autoincrement())
+  u_id             Int?
+  p_id             Int?
+  start_date       DateTime           @db.Date
+  validity_days    Int
+  end_date         DateTime           @db.Date
+  status           subscriptionstatus @default(EXPIRED)
+  membership_plans membership_plans?  @relation(fields: [p_id], references: [p_id], onDelete: NoAction, onUpdate: NoAction)
+  users            users?             @relation(fields: [u_id], references: [u_id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model users {
+  u_id          Int             @id @default(autoincrement())
+  first_name    String          @db.VarChar(255)
+  last_name     String          @db.VarChar(255)
+  phone_number  String          @unique @db.VarChar(10)
+  role          roles?          @default(USER)
+  sub_id        Int?
+  password      String
+  user_name     String          @unique @db.VarChar(30)
+  subscriptions subscriptions[]
+}
+
+enum roles {
+  USER
+  CASHIER
+  ADMIN
+  OWNER
+}
+
+enum subscriptionstatus {
+  VALID
+  EXPIRED
+}
