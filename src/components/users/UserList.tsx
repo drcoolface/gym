@@ -1,10 +1,11 @@
 "use client";
 import React, { useState } from "react";
 import Link from "next/link";
-import { handleDelete } from "@/app/plans/action";
+import { handleDelete } from "@/app/users/action";
 import { useRouter } from "next/navigation";
 
 import { users } from "@prisma/client";
+import { toast } from "react-toastify";
 
 interface UserListProps {
   users: Partial<users>[];
@@ -30,11 +31,12 @@ const UserList: React.FC<UserListProps> = ({ users, totalUsers }) => {
     if (userToDelete !== null) {
       try {
         await handleDelete(userToDelete);
+        toast.success("User deleted successfully");
         setTimeout(() => {
           router.refresh(); // Refresh the page after deleting
         }, 100);
-      } catch (error) {
-        console.error("Failed to delete user", error);
+      } catch (error: any) {
+        toast.error("Failed to delete user", error);
       } finally {
         closeDialog();
       }

@@ -27,9 +27,9 @@ const Home = () => {
         <div className="flex flex-col w-72 min-h-40 bg-white rounded items-center justify-center p-4">
           <h1 className="text-blue-600">Welcome!</h1>
           <h1 className="text-blue-600">You are logged in!</h1>
-          <div className="flex flex-col text-black font-extrabold my-4 gap-2">
+          {/* <div className="flex flex-col text-black font-extrabold my-4 gap-2">
             <button onClick={handleLogout}>Sign out!</button>
-          </div>
+          </div> */}
         </div>
       </div>
     );

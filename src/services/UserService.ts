@@ -1,3 +1,4 @@
+import { saltAndHashPassword } from "@/lib/utils";
 import { UserRepository } from "@/repositories/UserRepository";
 import { Prisma, users } from "@prisma/client";
 
@@ -49,11 +50,15 @@ export class UserService {
   static async createUser(data: any) {
     const repository = new UserRepository();
     try {
-      const newPlan = await repository.createUser(data);
-      return newPlan;
+      const password = data.password;
+      const hashedPassword = await saltAndHashPassword(password);
+      const newData = { ...data, password: hashedPassword };
+
+      const newUser = await repository.createUser(newData);
+      return newUser;
     } catch (error) {
-      console.error("Error creating plan:", error);
-      throw new Error("Failed to create plan");
+      console.error("Error creating user:", error);
+      throw new Error("Failed to create user");
     }
   }
 
@@ -61,14 +66,14 @@ export class UserService {
     const repository = new UserRepository();
 
     if (!id) {
-      throw new Error("Plan ID is required");
+      throw new Error("User ID is required");
     }
     try {
       await repository.deleteUserById(id);
-      console.log("Plan deleted successfully", id);
+      console.log("User deleted successfully", id);
     } catch (error) {
-      console.error("Error deleting plan by ID:", error);
-      throw new Error("Failed to delete plan");
+      console.error("Error deleting user by ID:", error);
+      throw new Error("Failed to delete user");
     }
   }
 }

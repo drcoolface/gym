@@ -68,5 +68,3 @@ Use the following credentials to log in:
 Username: janesmith
 Password: password123
 ```
-
-You can copy and paste this markdown directly into your GitHub README file.

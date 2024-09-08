@@ -2,8 +2,10 @@
 import { useState, useEffect, useCallback } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { debounce } from "lodash";
+import { useSession } from "next-auth/react";
 
 const Filters = () => {
+  const session = useSession();
   const router = useRouter();
   const searchParams = useSearchParams();
   const pathname = usePathname();
@@ -14,6 +16,11 @@ const Filters = () => {
   const defaultSortBy = resource[0].toLowerCase() + "_id";
   const defaultSortOrder = "asc";
   const defaultFilter = "";
+
+  const isAdmin =
+    session &&
+    session.status === "authenticated" &&
+    session.data.user.role === "ADMIN";
 
   const [sortBy, setSortBy] = useState<string>(
     searchParams.get("sortBy") || defaultSortBy
@@ -71,12 +78,14 @@ const Filters = () => {
           <option value="asc">Ascending</option>
           <option value="desc">Descending</option>
         </select>
-        <button
-          className="py-2 px-3 bg-green-400 text-white rounded-md"
-          onClick={() => router.push(`/${resource}/create`)}
-        >
-          Create
-        </button>
+        {isAdmin && (
+          <button
+            className="py-2 px-3 bg-green-400 text-white rounded-md"
+            onClick={() => router.push(`/${resource}/create`)}
+          >
+            Create
+          </button>
+        )}
       </div>
     </div>
   );
