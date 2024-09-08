@@ -1,33 +1,85 @@
-### Gym management prototype
+markdown
+Copy code
 
---- Features
+# Gym Management Prototype
 
-# Consists of user management and plans management
+A full-stack Next.js application for managing users and plans with TypeScript and Prisma. This app uses server-side rendering to deliver a seamless user experience.
 
-# Fullstack NextJS app with TypeScript and Prisma
+## Features
 
-# Uses server side rendering
+- **User Management**: Manage gym users and their details.
+- **Plans Management**: Handle various gym plans and their details.
 
---- How to run
+## How to Run
 
-# Install node
+1. **Install Node.js**: Ensure that Node.js is installed on your machine. You can download it from [nodejs.org](https://nodejs.org/).
 
-# clone the repo
+2. **Clone the Repository**:
 
-# `npm i` to install dependencies
+   ```bash
+   git clone <repository-url>
 
-# Create an .env file with `NEXTAUTH_SECRET = your_secret_key` (fill any combination of letters {used as secret for auth}) and
+   ```
 
-# `DATABASE_URL="postgresql://username:password@localhost:port/database_name"`
+3. **Install Dependencies**:
 
-# run `npx prisma init` to initilize prisma client
+```
+bash
+Copy code
+cd <repository-directory>
+npm install
+```
 
-# `npx prisma migrate dev --name init` to make the initial migration
+4. **Setup Environment Variables: Create a .env file in the root directory with the following content**:
 
-# `npx ts-node prisma/seed.ts` for initial seed data
+```
+env
+Copy code
 
-# run `npm run dev`
+NEXTAUTH_SECRET=your_secret_key
+DATABASE_URL="postgresql://username:password@localhost:port/database_name"
+```
 
--- App gets up and running
+5. **Initialize Prisma**:
 
-# Login using` user_name: "janesmith", password: "password123"`
+```
+bash
+Copy code
+npx prisma init
+```
+
+6. **Create Initial Migration**:
+
+```
+bash
+Copy code
+npx prisma migrate dev --name init
+```
+
+7. **Seed the Database**:
+
+```
+bash
+Copy code
+npx ts-node prisma/seed.ts
+```
+
+8. **Start the Development Server**:
+
+```
+bash
+Copy code
+npm run dev
+```
+
+9. **The application should now be up and running**.
+
+```
+Login Credentials
+Use the following credentials to log in:
+
+Username: janesmith
+Password: password123
+```
+
+You can copy and paste this markdown directly into your GitHub README file.
