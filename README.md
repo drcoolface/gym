@@ -24,59 +24,47 @@ A full-stack Next.js application for managing users and plans with TypeScript an
 3. **Install Dependencies**:
 
 ```bash
-Copy code
 cd <repository-directory>
 npm install
 ```
 
 4. **Setup Environment Variables: Create a .env file in the root directory with the following content**:
 
-```
-env
-Copy code
-
+```env
 NEXTAUTH_SECRET=your_secret_key
 DATABASE_URL="postgresql://username:password@localhost:port/database_name"
 ```
 
 5. **Initialize Prisma**:
 
-```
-bash
-Copy code
+```bash
 npx prisma init
 ```
 
 6. **Create Initial Migration**:
 
-```
-bash
-Copy code
+```bash
 npx prisma migrate dev --name init
 ```
 
 7. **Seed the Database**:
 
-```
-bash
-Copy code
+```bash
 npx ts-node prisma/seed.ts
 ```
 
 8. **Start the Development Server**:
 
-```
-bash
-Copy code
+```bash
 npm run dev
 ```
 
 9. **The application should now be up and running**.
 
-```
 Login Credentials
 Use the following credentials to log in:
 
+```
 Username: janesmith
 Password: password123
 ```
