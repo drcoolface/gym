@@ -23,8 +23,7 @@ A full-stack Next.js application for managing users and plans with TypeScript an
 
 3. **Install Dependencies**:
 
-```
-bash
+```bash
 Copy code
 cd <repository-directory>
 npm install
