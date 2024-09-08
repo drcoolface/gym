@@ -28,9 +28,6 @@ const Home = () => {
           <h1 className="text-blue-600">Welcome!</h1>
           <h1 className="text-blue-600">You are logged in!</h1>
           <div className="flex flex-col text-black font-extrabold my-4 gap-2">
-            <Link href="/plans">Go to plans </Link>
-            <Link href="/users">Go to users </Link>
-
             <button onClick={handleLogout}>Sign out!</button>
           </div>
         </div>

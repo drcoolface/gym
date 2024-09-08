@@ -1,16 +1,17 @@
 "use client";
 import React, { useState } from "react";
-import { User } from "@/types/db_types";
 import Link from "next/link";
 import { handleDelete } from "@/app/plans/action";
 import { useRouter } from "next/navigation";
 
+import { users } from "@prisma/client";
+
 interface UserListProps {
-  users: Omit<User, "phone_number" | "password" | "email">[];
+  users: Partial<users>[];
   totalUsers: number;
 }
 
-const PlanList: React.FC<UserListProps> = ({ users, totalUsers }) => {
+const UserList: React.FC<UserListProps> = ({ users, totalUsers }) => {
   const router = useRouter();
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
   const [userToDelete, setUserToDelete] = useState<number | null>(null);
@@ -46,40 +47,41 @@ const PlanList: React.FC<UserListProps> = ({ users, totalUsers }) => {
         Total records: {totalUsers ? totalUsers : "none"}
       </div>
       <ul className="space-y-4">
-        {users.map((user) => (
-          <li
-            key={user.u_id}
-            className="p-4 border border-gray-200 rounded-md shadow-sm"
-          >
-            <div className="flex justify-between p-4 items-center">
-              <div className="flex justify-between gap-8">
-                <div>
-                  <h3 className="text-lg font-semibold">{user.user_name}</h3>
-                  <h3 className="text-lg font-semibold">{user.role}</h3>
+        {users &&
+          users.map((user) => (
+            <li
+              key={user.u_id}
+              className="p-4 border border-gray-200 rounded-md shadow-sm"
+            >
+              <div className="flex justify-between p-4 items-center">
+                <div className="flex justify-between gap-8">
+                  <div>
+                    <h3 className="text-lg font-semibold">{user.user_name}</h3>
+                    <h3 className="text-lg font-semibold">{user.role}</h3>
+                  </div>
+                  <p className="text-gray-400 text-pretty">
+                    {user.first_name}
+                    {user.last_name}
+                  </p>
                 </div>
-                <p className="text-gray-400 text-pretty">
-                  {user.first_name}
-                  {user.last_name}
-                </p>
-              </div>
 
-              <div className="flex flex-col gap-2 text-center">
-                <Link
-                  className="bg-blue-500 text-white px-4 py-2 rounded-md"
-                  href={`users/edit/${user.u_id}`}
-                >
-                  Edit
-                </Link>
-                <button
-                  className="bg-red-500 text-white px-4 py-2 rounded-md"
-                  onClick={() => openDialog(user.u_id)}
-                >
-                  Delete
-                </button>
+                <div className="flex flex-col gap-2 text-center">
+                  <Link
+                    className="bg-blue-500 text-white px-4 py-2 rounded-md"
+                    href={`users/edit/${user.u_id}`}
+                  >
+                    Edit
+                  </Link>
+                  <button
+                    className="bg-red-500 text-white px-4 py-2 rounded-md"
+                    onClick={() => user.u_id && openDialog(user.u_id)}
+                  >
+                    Delete
+                  </button>
+                </div>
               </div>
-            </div>
-          </li>
-        ))}
+            </li>
+          ))}
       </ul>
 
       {/* Confirmation Dialog */}
@@ -109,4 +111,4 @@ const PlanList: React.FC<UserListProps> = ({ users, totalUsers }) => {
   );
 };
 
-export default PlanList;
+export default UserList;

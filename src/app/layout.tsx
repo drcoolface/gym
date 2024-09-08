@@ -3,6 +3,10 @@ import { Inter } from "next/font/google";
 import AuthProvider from "@/context/AuthProvider";
 import "./globals.css";
 import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css"; // Import react-toastify CSS
+
+import Footer from "@/components/ui/footer";
+import Navbar from "@/components/ui/navbar";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -18,9 +22,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className={`${inter.className}  bg-black text-white `}>
         <AuthProvider>
-          {children}
           <ToastContainer
             position="top-right"
             autoClose={3000}
@@ -32,6 +35,10 @@ export default function RootLayout({
             pauseOnHover
             theme="dark"
           />
+          <Navbar />
+          {children}
+
+          <Footer />
         </AuthProvider>
       </body>
     </html>

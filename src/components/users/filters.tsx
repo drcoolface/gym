@@ -1,11 +1,6 @@
 "use client";
 import { useState, useEffect, useCallback } from "react";
-import {
-  useParams,
-  usePathname,
-  useRouter,
-  useSearchParams,
-} from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { debounce } from "lodash";
 
 const Filters = () => {
@@ -16,7 +11,7 @@ const Filters = () => {
   const pathSegments = pathname.split("/").filter(Boolean);
   const resource = pathSegments[pathSegments.length - 1] || "";
 
-  const defaultSortBy = "p_id";
+  const defaultSortBy = resource[0].toLowerCase() + "_id";
   const defaultSortOrder = "asc";
   const defaultFilter = "";
 
@@ -53,7 +48,7 @@ const Filters = () => {
       <div className="mb-4 flex justify-between items-center space-x-4 flex-wrap">
         <input
           type="text"
-          placeholder="Search by name or description"
+          placeholder="Search by first_name or user_name."
           value={filter}
           onChange={(e) => setFilter(e.target.value)}
           className="border border-gray-300 rounded-md px-3 py-2 flex-1"
@@ -64,9 +59,8 @@ const Filters = () => {
           value={sortBy}
           className="border border-gray-300 rounded-md px-3 py-2"
         >
-          <option value="p_id">ID</option>
-          <option value="name">Name</option>
-          <option value="rate">Rate</option>
+          <option value="u_id">ID</option>
+          <option value="user_name">User name</option>
         </select>
 
         <select

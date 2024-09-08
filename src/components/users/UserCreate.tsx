@@ -1,20 +1,19 @@
+"use client";
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
-import { handleCreate } from "@/app/plans/action";
+import { roles } from "@prisma/client";
+import { handleCreate } from "@/app/users/action";
 
 const UserCreate: React.FC = () => {
   const router = useRouter();
-
-  enum Role {
-    Admin = "Admin",
-    User = "User",
-  }
 
   const [user, setUser] = useState({
     user_name: "",
     first_name: "",
     last_name: "",
-    role: Role.User,
+    role: roles.USER,
+    phone_number: "",
+    password: "",
   });
 
   const handleClose = () => {
@@ -46,7 +45,10 @@ const UserCreate: React.FC = () => {
     <div className="space-y-4 text-black">
       <form className="space-y-3" onSubmit={handleSubmit}>
         <div>
-          <label htmlFor="user_name" className="block text-sm font-medium text-gray-700">
+          <label
+            htmlFor="user_name"
+            className="block text-sm font-medium text-gray-700"
+          >
             User Name
           </label>
           <input
@@ -59,7 +61,10 @@ const UserCreate: React.FC = () => {
           />
         </div>
         <div>
-          <label htmlFor="first_name" className="block text-sm font-medium text-gray-700">
+          <label
+            htmlFor="first_name"
+            className="block text-sm font-medium text-gray-700"
+          >
             First Name
           </label>
           <input
@@ -72,7 +77,10 @@ const UserCreate: React.FC = () => {
           />
         </div>
         <div>
-          <label htmlFor="last_name" className="block text-sm font-medium text-gray-700">
+          <label
+            htmlFor="last_name"
+            className="block text-sm font-medium text-gray-700"
+          >
             Last Name
           </label>
           <input
@@ -85,7 +93,10 @@ const UserCreate: React.FC = () => {
           />
         </div>
         <div>
-          <label htmlFor="role" className="block text-sm font-medium text-gray-700">
+          <label
+            htmlFor="role"
+            className="block text-sm font-medium text-gray-700"
+          >
             Role
           </label>
           <input
@@ -93,6 +104,39 @@ const UserCreate: React.FC = () => {
             id="role"
             name="role"
             value={user.role}
+            onChange={handleChange}
+            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+          />
+        </div>
+        <div>
+          <label
+            htmlFor="phone_number"
+            className="block text-sm font-medium text-gray-700"
+          >
+            Phone Number
+          </label>
+          <input
+            type="text"
+            id="phone_number"
+            name="phone_number"
+            value={user.phone_number}
+            onChange={handleChange}
+            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+          />
+        </div>
+
+        <div>
+          <label
+            htmlFor="password"
+            className="block text-sm font-medium text-gray-700"
+          >
+            Password
+          </label>
+          <input
+            type="text"
+            id="password"
+            name="password"
+            value={user.password}
             onChange={handleChange}
             className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
           />

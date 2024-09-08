@@ -1,10 +1,11 @@
 import Modal from "@/components/ui/modal";
-import PlanCreate from "@/components/plans/PlanCreate";
 
-export default async function PlanCreateModal() {
+import UserCreate from "@/components/users/UserCreate";
+
+export default async function UserCreateModal() {
   return (
     <Modal open={true}>
-      <PlanCreate />
+      <UserCreate />
     </Modal>
   );
 }

@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { handleCreate } from "@/app/plans/action";
+import { toast } from "react-toastify";
 
 const PlanCreate: React.FC = () => {
   const router = useRouter();
@@ -26,12 +27,13 @@ const PlanCreate: React.FC = () => {
 
     try {
       await handleCreate(data);
+      toast.success("Plan created successfully");
       setTimeout(() => {
         router.refresh(); // Refresh the page after saving
       }, 1000);
       router.back(); // Navigate back after refreshing
-    } catch (error) {
-      console.error("Failed to create plan", error);
+    } catch (error: any) {
+      toast.error("Failed to create plan", error);
     }
   };
 

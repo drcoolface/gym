@@ -4,6 +4,7 @@ import { MembershipPlans } from "@/types/db_types";
 import Link from "next/link";
 import { handleDelete } from "@/app/plans/action";
 import { useRouter } from "next/navigation";
+import { toast } from "react-toastify";
 
 interface PlanListProps {
   plans: MembershipPlans[];
@@ -29,11 +30,12 @@ const PlanList: React.FC<PlanListProps> = ({ plans, totalPlans }) => {
     if (planToDelete !== null) {
       try {
         await handleDelete(planToDelete);
+        toast.success("Plan deleted successfully");
         setTimeout(() => {
           router.refresh(); // Refresh the page after deleting
         }, 100);
-      } catch (error) {
-        console.error("Failed to delete plan", error);
+      } catch (error: any) {
+        toast.error("Failed to delete plan", error);
       } finally {
         closeDialog();
       }

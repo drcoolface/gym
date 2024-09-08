@@ -1,10 +1,10 @@
 import React, { Suspense } from "react";
-import Filters from "@/components/ui/filters";
-import { PlansService } from "@/services/PlanService";
-import PlanList from "@/components/plans/planList";
+import Filters from "@/components/users/filters";
 import Pagination from "@/components/ui/pagination";
 import { ToastContainer } from "react-toastify";
 import Title from "@/components/ui/title";
+import UserList from "@/components/users/UserList";
+import { UserService } from "@/services/UserService";
 
 interface PageProps {
   searchParams: {
@@ -20,11 +20,11 @@ interface PageProps {
 const Page = async ({ searchParams }: PageProps) => {
   const page = parseInt(String(searchParams.page || "1"), 10);
   const pageSize = parseInt(String(searchParams.pageSize || "10"), 10);
-  const sortBy = searchParams.sortBy || "p_id";
+  const sortBy = searchParams.sortBy || "u_id";
   const sortOrder = searchParams.sortOrder || "asc";
   const filter = searchParams.filter || "";
 
-  const { plans, totalPlans } = await PlansService.getPlans(
+  const { users, totalUsers } = await UserService.getUsers(
     page,
     pageSize,
     sortBy,
@@ -33,13 +33,13 @@ const Page = async ({ searchParams }: PageProps) => {
   );
 
   return (
-    <div className="w-full h-screen  relative p-4">
+    <div className="w-full min-h-screen  p-4">
       <Title />
       <Filters />
       <Suspense fallback={<div>LOADING</div>}>
-        <PlanList plans={plans} totalPlans={totalPlans} />
+        <UserList users={users} totalUsers={totalUsers} />
       </Suspense>
-      <Pagination total={totalPlans} />
+      <Pagination total={totalUsers} />
       <ToastContainer />
     </div>
   );

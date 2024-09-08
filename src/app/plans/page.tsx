@@ -1,5 +1,5 @@
 import React, { Suspense } from "react";
-import Filters from "@/components/ui/filters";
+import Filters from "@/components/plans/filters";
 import { PlansService } from "@/services/PlanService";
 import PlanList from "@/components/plans/planList";
 import Pagination from "@/components/ui/pagination";
@@ -33,7 +33,7 @@ const Page = async ({ searchParams }: PageProps) => {
   );
 
   return (
-    <div className="w-full h-screen  relative p-4">
+    <div className="w-full min-h-screen p-4">
       <Title />
       <Filters />
       <Suspense fallback={<div>LOADING</div>}>

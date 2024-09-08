@@ -1,39 +1,45 @@
 "use client";
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
-import { handleEdit } from "@/app/plans/action";
-import { MembershipPlans } from "@/types/db_types";
+import { handleEdit } from "@/app/users/action";
+import { users } from "@prisma/client";
 
-interface PlanEditProps {
-  plan: MembershipPlans;
-  planId: string;
+interface UserEditProps {
+  user: users;
+  userId: string;
 }
 
-const PlanEdit: React.FC<PlanEditProps> = ({ plan, planId }) => {
+const UserEdit: React.FC<UserEditProps> = ({ user, userId }) => {
   const router = useRouter();
-  const [description, setDescription] = useState(plan.description || "");
-  const [rate, setRate] = useState(Number(plan.rate.toString()) || 0);
+  const [formState, setFormState] = useState({
+    first_name: user.first_name || "",
+    last_name: user.last_name || "",
+    phone_number: user.phone_number || "",
+  });
 
   const handleClose = () => {
     router.back();
   };
 
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormState({
+      ...formState,
+      [name]: value,
+    });
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const updatedData = {
-      description,
-      rate: Number(rate),
-    };
-
     try {
-      await handleEdit(Number(planId), updatedData);
+      await handleEdit(Number(userId), formState);
       setTimeout(() => {
         router.refresh(); // Refresh the page after saving
       }, 1000);
       router.back(); // Navigate back after saving
     } catch (error) {
-      console.error("Failed to edit plan", error);
+      console.error("Failed to edit user", error);
     }
   };
 
@@ -42,52 +48,54 @@ const PlanEdit: React.FC<PlanEditProps> = ({ plan, planId }) => {
       <form className="space-y-3" onSubmit={handleSubmit}>
         <div>
           <label
-            htmlFor="name"
+            htmlFor="first_name"
             className="block text-sm font-medium text-gray-700"
           >
-            Name
+            First Name
           </label>
           <input
             type="text"
-            id="name"
-            name="name"
-            disabled
-            defaultValue={plan.name}
+            id="first_name"
+            name="first_name"
+            value={formState.first_name}
+            onChange={handleChange}
             className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
           />
         </div>
         <div>
           <label
-            htmlFor="description"
+            htmlFor="last_name"
             className="block text-sm font-medium text-gray-700"
           >
-            Description
-          </label>
-          <textarea
-            id="description"
-            name="description"
-            rows={3}
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-          ></textarea>
-        </div>
-        <div>
-          <label
-            htmlFor="rate"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Rate
+            Last Name
           </label>
           <input
-            type="number"
-            id="rate"
-            name="rate"
-            value={rate}
-            onChange={(e) => setRate(Number(e.target.value))}
+            type="text"
+            id="last_name"
+            name="last_name"
+            value={formState.last_name}
+            onChange={handleChange}
             className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
           />
         </div>
+
+        <div>
+          <label
+            htmlFor="phone_number"
+            className="block text-sm font-medium text-gray-700"
+          >
+            Phone Number
+          </label>
+          <input
+            type="text"
+            id="phone_number"
+            name="phone_number"
+            value={formState.phone_number}
+            onChange={handleChange}
+            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+          />
+        </div>
+
         <div className="flex justify-end space-x-4">
           <button
             type="button"
@@ -108,4 +116,4 @@ const PlanEdit: React.FC<PlanEditProps> = ({ plan, planId }) => {
   );
 };
 
-export default PlanEdit;
+export default UserEdit;

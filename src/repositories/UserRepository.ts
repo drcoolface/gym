@@ -1,30 +1,36 @@
-import { Prisma } from "@prisma/client";
+import { Prisma, users } from "@prisma/client";
 import { db } from "@/lib/db"; // Adjust the import based on your folder structure
-import { MembershipPlans } from "@/types/db_types";
 
 export class UserRepository {
-  async getPlans(
+  async getUsers(
     page: number = 1,
     pageSize: number = 10,
-    sortBy: string = "p_id",
+    sortBy: string = "u_id",
     sortOrder: string = "asc",
     filter: string = ""
-  ): Promise<{ plans: MembershipPlans[]; totalPlans: number }> {
+  ): Promise<{ users: Partial<users>[]; totalUsers: number }> {
     const pageNumber = page || 1;
     const limit = pageSize || 10;
     const skip = (pageNumber - 1) * limit;
 
-    const where: Prisma.membership_plansWhereInput = filter
+    const where: Prisma.usersWhereInput = filter
       ? {
           OR: [
             {
-              name: {
+              user_name: {
+                contains: filter,
+                mode: Prisma.QueryMode.insensitive,
+              },
+            },
+
+            {
+              first_name: {
                 contains: filter,
                 mode: Prisma.QueryMode.insensitive,
               },
             },
             {
-              description: {
+              last_name: {
                 contains: filter,
                 mode: Prisma.QueryMode.insensitive,
               },
@@ -33,53 +39,61 @@ export class UserRepository {
         }
       : {};
 
-    const plans = await db.membership_plans.findMany({
+    const users: Partial<users>[] = await db.users.findMany({
       where,
       orderBy: {
         [sortBy]: sortOrder,
       },
       skip,
       take: limit,
-    });
-
-    const totalPlans = await db.membership_plans.count({ where });
-
-    return { plans, totalPlans };
-  }
-
-  async getPlanById(id: number): Promise<MembershipPlans | null> {
-    const plan = db.membership_plans.findUnique({
-      where: {
-        p_id: id,
+      select: {
+        first_name: true,
+        last_name: true,
+        user_name: true,
+        role: true,
+        u_id: true,
+        password: false,
       },
     });
-    return plan;
+
+    const totalUsers = await db.users.count({ where });
+
+    return { users, totalUsers };
   }
 
-  async editPlanById(
+  async getUserById(id: number): Promise<users | null> {
+    const user = await db.users.findUnique({
+      where: {
+        u_id: id,
+      },
+    });
+    return user;
+  }
+
+  async editUserById(
     id: number,
-    data: Prisma.membership_plansUpdateInput
-  ): Promise<MembershipPlans | null> {
-    const plan = db.membership_plans.update({
+    data: Prisma.usersUpdateInput
+  ): Promise<users | null> {
+    const user = db.users.update({
       where: {
-        p_id: id,
+        u_id: id,
       },
       data,
     });
-    return plan;
+    return user;
   }
 
-  async createPlan(data: Prisma.membership_plansCreateInput) {
-    const plan = db.membership_plans.create({
+  async createUser(data: Prisma.usersCreateInput) {
+    const user = db.users.create({
       data,
     });
-    return plan;
+    return user;
   }
 
-  async deletePlanById(id: number) {
-    await db.membership_plans.delete({
+  async deleteUserById(id: number) {
+    await db.users.delete({
       where: {
-        p_id: id,
+        u_id: id,
       },
     });
   }
