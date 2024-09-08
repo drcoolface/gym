@@ -1,6 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import { Decimal } from "@prisma/client/runtime/library";
 import { db as prisma } from "@/lib/db";
+import { saltAndHashPassword } from "@/lib/utils";
 
 async function main() {
   // Create some initial membership plans
@@ -27,7 +28,7 @@ async function main() {
       last_name: "Doe",
       phone_number: "1234567890",
       role: "USER",
-      password: "password123", // Note: In a real application, ensure passwords are hashed
+      password: saltAndHashPassword("password123"), // Note: In a real application, ensure passwords are hashed
       user_name: "johndoe",
     },
   });
@@ -38,7 +39,7 @@ async function main() {
       last_name: "Smith",
       phone_number: "0987654321",
       role: "ADMIN",
-      password: "password123", // Note: In a real application, ensure passwords are hashed
+      password: saltAndHashPassword("password123"), // Note: In a real application, ensure passwords are hashed
       user_name: "janesmith",
     },
   });
