@@ -6,6 +6,8 @@ import { UserService } from "@/services/UserService";
 import { users } from "@prisma/client";
 import UserEdit from "@/components/users/UserEdit";
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 export default async function UserEditModal({
   params: { userId },
 }: {

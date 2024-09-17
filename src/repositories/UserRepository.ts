@@ -1,4 +1,4 @@
-import { Prisma, users } from "@prisma/client";
+import { Prisma, subscriptions, users } from "@prisma/client";
 import { db } from "@/lib/db"; // Adjust the import based on your folder structure
 
 export class UserRepository {
@@ -8,7 +8,10 @@ export class UserRepository {
     sortBy: string = "u_id",
     sortOrder: string = "asc",
     filter: string = ""
-  ): Promise<{ users: Partial<users>[]; totalUsers: number }> {
+  ): Promise<{
+    users: (Partial<users> & { subscriptions: Partial<subscriptions>[] })[];
+    totalUsers: number;
+  }> {
     const pageNumber = page || 1;
     const limit = pageSize || 10;
     const skip = (pageNumber - 1) * limit;
@@ -39,7 +42,9 @@ export class UserRepository {
         }
       : {};
 
-    const users: Partial<users>[] = await db.users.findMany({
+    const users: (Partial<users> & {
+      subscriptions: Partial<subscriptions>[];
+    })[] = await db.users.findMany({
       where,
       orderBy: {
         [sortBy]: sortOrder,
@@ -52,7 +57,17 @@ export class UserRepository {
         user_name: true,
         role: true,
         u_id: true,
-        password: false,
+        subscriptions: {
+          select: {
+            p_id: true,
+            validity_days: true,
+            membership_plans: {
+              select: {
+                name: true,
+              },
+            },
+          },
+        },
       },
     });
 

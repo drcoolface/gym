@@ -1,6 +1,8 @@
 "use server";
 import { UserService } from "@/services/UserService";
 import { users } from "@prisma/client";
+import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 
 export const handleEdit = async (
   userId: number,

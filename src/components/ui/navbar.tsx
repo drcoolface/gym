@@ -6,6 +6,8 @@ import { signOut, useSession } from "next-auth/react";
 import { toast } from "react-toastify";
 
 const Navbar = () => {
+  const session = useSession();
+
   const router = useRouter();
 
   const handleLogout = async () => {
@@ -21,7 +23,6 @@ const Navbar = () => {
   };
 
   const pathname = usePathname();
-  const session = useSession();
 
   if (session.status === "authenticated")
     return (

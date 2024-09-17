@@ -1,15 +1,12 @@
-import { PrismaClient } from "@prisma/client";
-import { Decimal } from "@prisma/client/runtime/library";
 import { db as prisma } from "@/lib/db";
-import { saltAndHashPassword } from "@/lib/utils";
+import { saltAndHashPassword } from "./../src/lib/utils";
 
-async function main() {
-  // Create some initial membership plans
+export async function seed() {
   const basicPlan = await prisma.membership_plans.create({
     data: {
       name: "Basic Plan",
       description: "A basic subscription plan",
-      rate: new Decimal(9.99), // Example rate
+      rate: 12, // Example rate
     },
   });
 
@@ -17,7 +14,7 @@ async function main() {
     data: {
       name: "Premium Plan",
       description: "A premium subscription plan",
-      rate: new Decimal(19.99), // Example rate
+      rate: 22, // Example rate
     },
   });
 
@@ -52,7 +49,6 @@ async function main() {
       start_date: new Date(),
       validity_days: 30,
       end_date: new Date(new Date().setDate(new Date().getDate() + 30)),
-      status: "VALID",
     },
   });
 
@@ -63,17 +59,8 @@ async function main() {
       start_date: new Date(),
       validity_days: 30,
       end_date: new Date(new Date().setDate(new Date().getDate() + 30)),
-      status: "VALID",
     },
   });
 
   console.log("Database seeded successfully.");
 }
-
-main()
-  .catch((e) => {
-    throw e;
-  })
-  .finally(async () => {
-    await prisma.$disconnect();
-  });

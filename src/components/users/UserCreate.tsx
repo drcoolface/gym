@@ -3,7 +3,9 @@ import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { roles } from "@prisma/client";
 import { handleCreate } from "@/app/users/action";
+import { toast } from "react-toastify";
 
+type Role = "ADMIN" | "USER";
 const UserCreate: React.FC = () => {
   const router = useRouter();
 
@@ -22,14 +24,17 @@ const UserCreate: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
     try {
       await handleCreate(user);
+      toast.success("User created successfully");
+
       setTimeout(() => {
-        router.refresh(); // Refresh the page after saving
-      }, 1000);
-      router.back(); // Navigate back after refreshing
-    } catch (error) {
+        router.back();
+      }, 300);
+      router.refresh();
+    } catch (error: any) {
+      router.back();
+      toast.error("Failed to create user", error);
       console.error("Failed to create user", error);
     }
   };

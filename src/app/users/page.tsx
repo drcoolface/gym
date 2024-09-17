@@ -37,6 +37,7 @@ const Page = async ({ searchParams }: PageProps) => {
       <Title />
       <Filters />
       <Suspense fallback={<div>LOADING</div>}>
+        {/* @ts-ignore */}
         <UserList users={users} totalUsers={totalUsers} />
       </Suspense>
       <Pagination total={totalUsers} />
